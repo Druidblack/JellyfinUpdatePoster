@@ -20,16 +20,11 @@ def start_get_and_save_series_and_movie():
         new_ids, has_processing_tags, items_with_tags, items_with_unknown_years = process_media_list(media_list)
         old_ids = load_cached_ids()
 
-        unknown_years = any(item.get('Year') == 'Unknown' and item['Type'] in ['Series', 'Movie'] for item in media_list)
-        if has_processing_tags or unknown_years:
-            log("IMDB or TVDB tags detected or unknown years found. Waiting 30 seconds before refreshing...")
+        if has_processing_tags:
+            log("IMDB or TVDB tags detected. Waiting 30 seconds before refreshing...")
             if has_processing_tags:
                 log("Items with processing tags:")
                 for item in items_with_tags:
-                    log(f"  - {item}")
-            if items_with_unknown_years:
-                log("Items with unknown years:")
-                for item in items_with_unknown_years:
                     log(f"  - {item}")
             time.sleep(30)
             if os.path.exists(ID_CACHE_FILENAME):
